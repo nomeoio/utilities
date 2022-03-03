@@ -165,10 +165,9 @@ func (sc *SlackClient) SendBlocks(msgBlocks MessageBlocks, url string) (err erro
 		return
 	}
 	if sc.IsTestMode {
-		return sc.SendBytes(reqBody, os.Getenv("SlackWebHookUrlTest"), nil)
-	} else {
-		return sc.SendBytes(reqBody, url, nil)
+		url = os.Getenv("SlackWebHookUrlTest")
 	}
+	return sc.SendBytes(reqBody, url, nil)
 }
 
 func (sc SlackClient) DeleteMsg(channelID, ts string) (err error) {
