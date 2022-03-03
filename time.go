@@ -7,13 +7,25 @@ func ConvertUnixTime(unixTs int64) (tm string) {
 	return
 }
 
-func TimeNow(timezone, timeFormat string) (string, int64) {
+func TimeNowString(timezone, timeFormat string) (nowString string, err error) {
 	// TimeNow("Asia/Shanghai", "2006-01-02 15:04:05")
 	var loc *time.Location
-	var err error
 	if loc, err = time.LoadLocation(timezone); err != nil {
-		panic(err)
+		return
 	}
 	var now time.Time = time.Now().In(loc)
-	return now.Format(timeFormat), now.Unix()
+	nowString = now.Format(timeFormat)
+	return
+}
+
+func TimeNowUnix(timezone, timeFormat string) (timeUnix int64, err error) {
+	// TimeNow("Asia/Shanghai", "2006-01-02 15:04:05")
+	var loc *time.Location
+	if loc, err = time.LoadLocation(timezone); err != nil {
+		return
+	}
+	var now time.Time = time.Now().In(loc)
+	timeUnix = now.Unix()
+
+	return
 }
