@@ -2,8 +2,13 @@ package utilities
 
 import "time"
 
-func ConvertUnixTime(unixTs int64) (tm string) {
-	tm = time.Unix(unixTs, 0).Format("2006-01-02")
+func ConvertUnixTime(unixTs int64, timezone, timeFormat string) (tm string, err error) {
+	// ConvertUnixTime("Asia/Shanghai","2006-01-02 15:04:05")
+	var loc *time.Location
+	if loc, err = time.LoadLocation(timezone); err != nil {
+		return
+	}
+	tm = time.Unix(unixTs, 0).In(loc).Format(timeFormat)
 	return
 }
 

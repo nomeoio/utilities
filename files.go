@@ -6,7 +6,20 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 )
+
+func AbsCwd() (cwd string, err error) {
+	// os.Getwd() reuturns where you're in terminal window.
+	// this func returns the directory of the executable
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		err = errors.New("unable to get the current filename")
+		return
+	}
+	cwd = filepath.Dir(filename)
+	return
+}
 
 func ReadFile(fp string) (b []byte, err error) {
 	if b, err = ioutil.ReadFile(fp); err != nil {
