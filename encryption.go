@@ -8,14 +8,13 @@ import (
 	"errors"
 	"io"
 	"log"
-	"os"
 )
 
-func Encrypt(message string) (encodedMsg string, err error) {
+func Encrypt(message, encryptionKey string) (encodedMsg string, err error) {
 	var plainText = []byte(message)
 
 	var block cipher.Block
-	var key = []byte(os.Getenv("ENCRYPTION_KEY"))
+	var key = []byte(encryptionKey)
 	if block, err = aes.NewCipher(key); err != nil {
 		return
 	}
@@ -37,14 +36,14 @@ func Encrypt(message string) (encodedMsg string, err error) {
 	return
 }
 
-func Decrypt(encodedMsg string) (decodedMsg string, err error) {
+func Decrypt(encodedMsg, encryptionKey string) (decodedMsg string, err error) {
 	var cipherText []byte
 	if cipherText, err = base64.RawStdEncoding.DecodeString(encodedMsg); err != nil {
 		return
 	}
 
 	var block cipher.Block
-	var key = []byte(os.Getenv("ENCRYPTION_KEY"))
+	var key = []byte(encryptionKey)
 	block, err = aes.NewCipher(key)
 	if err != nil {
 		return
