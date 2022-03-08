@@ -32,13 +32,13 @@ func Encrypt(message, encryptionKey string) (encodedMsg string, err error) {
 	stream.XORKeyStream(cipherText[aes.BlockSize:], plainText)
 
 	//returns to base64 encoded string
-	encodedMsg = base64.RawStdEncoding.EncodeToString(cipherText)
+	encodedMsg = base64.URLEncoding.EncodeToString(cipherText)
 	return
 }
 
 func Decrypt(encodedMsg, encryptionKey string) (decodedMsg string, err error) {
 	var cipherText []byte
-	if cipherText, err = base64.RawStdEncoding.DecodeString(encodedMsg); err != nil {
+	if cipherText, err = base64.URLEncoding.DecodeString(encodedMsg); err != nil {
 		return
 	}
 
