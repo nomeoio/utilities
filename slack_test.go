@@ -21,6 +21,13 @@ func TestRandomString(t *testing.T) {
 	RandomString()
 }
 
+func TestSendRealPlainText(t *testing.T) {
+	var err error = sc.SendPlainText("this is great!!!!", "url")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestSendPlainText(t *testing.T) {
 	t.Fatal(strings.Contains(os.Args[0], "test"))
 	var err error = sc.SendPlainText("what's *up* https://api.slack.com/reference/messaging/link-unfurling", os.Getenv("SlackWebHookUrlTest"))

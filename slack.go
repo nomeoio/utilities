@@ -103,7 +103,14 @@ func (sc SlackClient) SendMarkdownText(text, url, imageUrl string) (err error) {
 }
 
 func (sc SlackClient) SendPlainText(text, url string) (err error) {
-	return sc.sendText(sc.CreateTextBlocks(text, "plain_text", ""), url)
+	var plainText = struct {
+		Text string `json:"text,omitempty"`
+	}{Text: text}
+	var reqBody []byte
+	if reqBody, err = json.Marshal(plainText); err != nil {
+		return
+	}
+	return sc.SendBytes(reqBody, url, nil)
 }
 
 func (sc SlackClient) CreateTextBlocks(text, textType, imageUrl string) MessageBlocks {
