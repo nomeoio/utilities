@@ -7,6 +7,15 @@ import (
 	"os"
 )
 
+func GetRedirectedLink(link string) (redirectedLink string, err error) {
+	var resp *http.Response
+	if resp, err = http.Get(link); err != nil {
+		return
+	}
+	redirectedLink = resp.Request.URL.String()
+	return
+}
+
 func HttpRequest(requestMethod string, reqBody []byte, url string, headers [][]string) (respBody []byte, err error) {
 	var req *http.Request
 	var resp *http.Response
