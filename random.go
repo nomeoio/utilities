@@ -1,15 +1,20 @@
 package utilities
 
 import (
+	crypto_rand "crypto/rand"
+	"encoding/binary"
 	"fmt"
-	"math/rand"
-	"time"
+	math_rand "math/rand"
 )
 
 func RandomString() string {
-	var length int = 6
-	rand.Seed(time.Now().UnixNano())
+	var length int = 8
 	b := make([]byte, length)
-	rand.Read(b)
-	return fmt.Sprintf("%x", b)[:length]
+	_, err := crypto_rand.Read(b[:])
+	if err != nil {
+		panic("cannot seed math/rand package with cryptographically secure random number generator")
+	}
+	math_rand.Seed(int64(binary.LittleEndian.Uint64(b[:])))
+	math_rand.Read(b)
+	return fmt.Sprintf("%x", b)
 }

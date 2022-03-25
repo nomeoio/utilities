@@ -17,10 +17,6 @@ var sc = SlackClient{
 	IsTestMode: strings.Contains(os.Args[0], "test"),
 }
 
-func TestRandomString(t *testing.T) {
-	RandomString()
-}
-
 func TestSendRealPlainText(t *testing.T) {
 	var err error = sc.SendPlainText("this is great!!!!", "url")
 	if err != nil {
