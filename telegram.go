@@ -49,9 +49,7 @@ func (tg Telegram) EscapeChars(text string) string {
 	var charList = []string{"(", ")", "!", "_", "-", "=", "+", ".", "{", "}", "<", ">", "|", "#"}
 	for _, char := range charList {
 		if strings.Contains(text, char) {
-			log.Println(char, "- text before: ", text)
 			text = strings.ReplaceAll(text, char, `\`+char)
-			log.Println(char, "- text after: ", text)
 		}
 	}
 	return text
