@@ -11,9 +11,10 @@ import (
 type Telegram struct{}
 
 type TGSendMsg struct {
-	ChatId    string `json:"chat_id,omitempty"`
-	Text      string `json:"text,omitempty"`
-	ParseMode string `json:"parse_mode,omitempty"`
+	ChatId          string `json:"chat_id,omitempty"`
+	Text            string `json:"text,omitempty"`
+	ParseMode       string `json:"parse_mode,omitempty"`
+	MessageThreadID string `json:"message_thread_id,omitempty"`
 }
 
 type TGEvent struct {
@@ -55,12 +56,13 @@ func (tg Telegram) EscapeChars(text string) string {
 	return text
 }
 
-func (tg Telegram) SendMessage(apiToken, chatId, text string) (resp TGResp) {
+func (tg Telegram) SendMessage(apiToken, text, chatId, threadID string) (resp TGResp) {
 	text = tg.EscapeChars(text)
 	var msg = TGSendMsg{
-		ChatId:    chatId,
-		Text:      text,
-		ParseMode: "MarkdownV2",
+		ChatId:          chatId,
+		Text:            text,
+		ParseMode:       "MarkdownV2",
+		MessageThreadID: threadID,
 	}
 	b, _ := json.Marshal(msg)
 
