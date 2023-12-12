@@ -47,7 +47,7 @@ type TGResp struct {
 }
 
 func (tg Telegram) EscapeChars(text string) string {
-	var charList = []string{"{", "}", "<", ">", "/", ":", "!", "_", "-", "=", "+", ".", "|", "#"}
+	var charList = []string{"{", "}", "<", ">", "/", ":", "!", "-", "=", "+", ".", "|", "#"}
 	for _, char := range charList {
 		if strings.Contains(text, char) {
 			text = strings.ReplaceAll(text, char, `\`+char)
