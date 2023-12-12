@@ -11,43 +11,43 @@ import (
 type Telegram struct{}
 
 type TGSendMsg struct {
-	ChatId          string `json:"chat_id,omitempty"`
-	Text            string `json:"text,omitempty"`
-	ParseMode       string `json:"parse_mode,omitempty"`
-	MessageThreadID string `json:"message_thread_id,omitempty"`
+	ChatId          string `json:"chat_id"`
+	Text            string `json:"text"`
+	ParseMode       string `json:"parse_mode"`
+	MessageThreadID string `json:"message_thread_id"`
 }
 
 type TGEvent struct {
-	UpdateID int       `json:"update_id,omitempty"`
-	Message  TGMessage `json:"message,omitempty"`
+	UpdateID int       `json:"update_id"`
+	Message  TGMessage `json:"message"`
 }
 type TGMessage struct {
-	MessageID      int           `json:"message_id,omitempty"`
-	From           TGMessageFrom `json:"from,omitempty"`
-	Chat           TGMessageChat `json:"chat,omitempty"`
-	ReplyToMessage *TGMessage    `json:"reply_to_message,omitempty"`
+	MessageID      int           `json:"message_id"`
+	From           TGMessageFrom `json:"from"`
+	Chat           TGMessageChat `json:"chat"`
+	ReplyToMessage *TGMessage    `json:"reply_to_message"`
 }
 
 type TGMessageFrom struct { // the user info
-	ID        int    `json:"id,omitempty"`
-	IsBot     bool   `json:"is_bot,omitempty"`
-	FirstName string `json:"first_name,omitempty"`
-	Username  string `json:"username,omitempty"`
+	ID        int    `json:"id"`
+	IsBot     bool   `json:"is_bot"`
+	FirstName string `json:"first_name"`
+	Username  string `json:"username"`
 }
 
 type TGMessageChat struct {
-	Date int    `json:"date,omitempty"`
-	Text string `json:"text,omitempty"`
+	Date int    `json:"date"`
+	Text string `json:"text"`
 }
 
 type TGResp struct {
-	OK          bool   `json:"ok,omitempty"`
-	Description string `json:"description,omitempty"`
-	ErrorCode   int    `json:"error_code,omitempty"`
+	OK          bool   `json:"ok"`
+	Description string `json:"description"`
+	ErrorCode   int    `json:"error_code"`
 }
 
 func (tg Telegram) EscapeChars(text string) string {
-	var charList = []string{"(", ")", "!", "_", "-", "=", "+", ".", "{", "}", "<", ">", "|", "#"}
+	var charList = []string{"{", "}", "<", ">", "/", ":", "!", "_", "-", "=", "+", ".", "|", "#"}
 	for _, char := range charList {
 		if strings.Contains(text, char) {
 			text = strings.ReplaceAll(text, char, `\`+char)
@@ -64,12 +64,13 @@ func (tg Telegram) SendMessage(apiToken, text, chatId, threadID string) (resp TG
 		ParseMode:       "MarkdownV2",
 		MessageThreadID: threadID,
 	}
+	log.Printf("text: %+v", text)
 	b, _ := json.Marshal(msg)
 
 	var err error
 	var respBody []byte
 	if respBody, err = HttpRequest(
-		"GET", b,
+		"POST", b,
 		fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", apiToken),
 		[][]string{{"Accept", "application/json"}, {"Content-Type", "application/json"}},
 	); err != nil {
@@ -79,6 +80,8 @@ func (tg Telegram) SendMessage(apiToken, text, chatId, threadID string) (resp TG
 	if err = json.Unmarshal(respBody, &resp); err != nil {
 		log.Fatalln(err)
 	}
+	log.Printf("resp: %+v", resp)
+	log.Println("respbody", string(respBody))
 	// if !resp.OK {
 	// 	SC.SendPlainText(string(respBody), os.Getenv("SlackWebHookNomeoHQErrs"))
 	// }
