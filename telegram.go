@@ -80,11 +80,6 @@ func (tg Telegram) SendMessage(apiToken, text, chatId, threadID string) (resp TG
 	if err = json.Unmarshal(respBody, &resp); err != nil {
 		log.Fatalln(err)
 	}
-	log.Printf("resp: %+v", resp)
-	log.Println("respbody", string(respBody))
-	// if !resp.OK {
-	// 	SC.SendPlainText(string(respBody), os.Getenv("SlackWebHookNomeoHQErrs"))
-	// }
 	return
 }
 
