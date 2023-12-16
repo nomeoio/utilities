@@ -2,17 +2,15 @@ package utilities
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"runtime/debug"
 	"strings"
 )
 
-func FormatError(timezone, timeFormat string, err error) (errMsg string) {
+func FormatError(timezone, timeFormat string, err error) (errMsg string, e error) {
 	var now, wd string
-	var e error
 	if wd, e = os.Getwd(); e != nil {
-		log.Panic(e)
+		return
 	}
 	now, _ = TimeNowString(timezone, timeFormat)
 	errMsg = fmt.Sprintf("%s\nerr: %s\ndetail: %s", now, err.Error(), strings.Replace(string(debug.Stack()), wd, ".", -1))

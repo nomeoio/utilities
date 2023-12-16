@@ -7,7 +7,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"io"
-	"log"
 )
 
 func Encrypt(message, encryptionKey string) (encodedMsg string, err error) {
@@ -24,7 +23,6 @@ func Encrypt(message, encryptionKey string) (encodedMsg string, err error) {
 	var cipherText = make([]byte, aes.BlockSize+len(plainText))
 	var iv []byte = cipherText[:aes.BlockSize]
 	if _, err = io.ReadFull(crand.Reader, iv); err != nil {
-		log.Panicln(err)
 		return
 	}
 

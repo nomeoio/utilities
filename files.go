@@ -2,8 +2,6 @@ package utilities
 
 import (
 	"errors"
-	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -22,14 +20,12 @@ func AbsCwd() (cwd string, err error) {
 }
 
 func ReadFile(fp string) (b []byte, err error) {
-	if b, err = ioutil.ReadFile(fp); err != nil {
-		log.Printf("%s not found: %s", fp, err)
-	}
+	b, err = os.ReadFile(fp)
 	return
 }
 
 func WriteFile(b []byte, filename string) (err error) {
-	return ioutil.WriteFile(filename, b, 0644)
+	return os.WriteFile(filename, b, 0644)
 }
 
 func DoesFileExist(fp string) (exist bool, err error) {
@@ -44,10 +40,10 @@ func DoesFileExist(fp string) (exist bool, err error) {
 func CreateDirIfNotExist(fp string) (err error) {
 	var dp string = filepath.Dir(fp) // dir path
 	if _, err = os.Stat(dp); os.IsNotExist(err) {
-		err = os.MkdirAll(dp, os.ModePerm)
-		if err == nil {
+		if err != nil {
 			return
 		}
+		err = os.MkdirAll(dp, os.ModePerm)
 	}
 	return
 }

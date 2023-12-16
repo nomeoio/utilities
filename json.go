@@ -3,13 +3,12 @@ package utilities
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 )
 
-func PrettyJsonString(body []byte) (respJson string) {
+func PrettyJsonString(body []byte) (respJson string, err error) {
 	dst := &bytes.Buffer{}
-	if err := json.Indent(dst, body, "", "  "); err != nil {
-		log.Panic(err)
+	if err = json.Indent(dst, body, "", "  "); err != nil {
+		return
 	}
 	respJson = dst.String()
 	return
