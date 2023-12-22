@@ -45,7 +45,7 @@ type TGResp struct {
 }
 
 func (tg Telegram) EscapeChars(text string) string {
-	var charList = []string{"{", "}", "<", ">", "/", ":", "!", "-", "=", "+", ".", "|", "#"}
+	var charList = []string{"{", "}", "(", ")", "[", "]", "<", ">", "/", ":", "!", "-", "=", "+", ".", "|", "#"}
 	for _, char := range charList {
 		if strings.Contains(text, char) {
 			text = strings.ReplaceAll(text, char, `\`+char)
@@ -55,11 +55,11 @@ func (tg Telegram) EscapeChars(text string) string {
 }
 
 func (tg Telegram) SendMessage(apiToken, text, chatId, threadID string) (resp TGResp, err error) {
-	text = tg.EscapeChars(text)
+	// text = tg.EscapeChars(text)
 	var msg = TGSendMsg{
 		ChatId:          chatId,
 		Text:            text,
-		ParseMode:       "MarkdownV2",
+		ParseMode:       "Markdown",
 		MessageThreadID: threadID,
 	}
 	b, _ := json.Marshal(msg)
